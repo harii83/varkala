@@ -1,3 +1,4 @@
+
 """
 Django settings for varkala project.
 
@@ -53,18 +54,26 @@ ROOT_URLCONF = 'varkala.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'APP_DIRS': True, # Looks for 'jinja2' directories in apps
+        'OPTIONS': {
+            'environment': 'your_project_name.jinja2.environment',
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
-        },
+            ]}
+        # ... other Django template config ...
     },
 ]
+
+
 
 WSGI_APPLICATION = 'varkala.wsgi.application'
 
@@ -115,3 +124,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+"""
