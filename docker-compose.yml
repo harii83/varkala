@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=varkala_db
+      - POSTGRES_USER=varkala_user
+      - POSTGRES_PASSWORD=varkala_pass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U varkala_user -d varkala_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    volumes:
+      - .:/app/varkala
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgres://varkala_user:varkala_pass@db:5432/varkala_db
+    depends_on:
+      db:
+        condition: service_healthy
+    command: python manage.py runserver 0.0.0.0:8000
+
+volumes:
+  postgres_data:
